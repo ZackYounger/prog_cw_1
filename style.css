@@ -1,0 +1,45 @@
+body {
+    padding: 55px;
+    background-color: rgb(0, 0, 0);
+}
+
+.graph-container {
+    padding: 30px;
+    height: 400px;
+}
+
+.canvas-container {
+    height: 80%;
+}
+
+.border {
+    border: rgb(41, 41, 41)    1px solid;
+    border-radius: 8px;
+}
+
+.test-border {
+    border: red 2px dashed;
+}
+
+
+#days-container {
+    display: flex;
+    border: blue 1px solid;
+    width: 100%;
+}
+
+.day-container {
+    flex: 1;
+    text-align: center;
+    height: 50px;
+}
+
+.day-progress {
+    width: 30px;
+    height: 30px;
+    border: blue 1px solid;
+}
+
+p {
+    color: white;
+}
