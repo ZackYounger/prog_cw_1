@@ -31,7 +31,6 @@ body {
 .day-container {
     flex: 1;
     text-align: center;
-    height: 50px;
 }
 
 .day-progress {

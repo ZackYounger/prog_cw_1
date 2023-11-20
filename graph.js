@@ -1,7 +1,13 @@
 const detail = 0.1;
 const paddingPX = 30;
-const bezierStength = .5;
+var bezierStength = .7;
+
 const lineColour = 'rgba(255,255,255,1)'
+const backgroundColour = 'rgba(0,0,0,1)'
+
+const circleWidth = 10;
+const innerCircleWidth = 5;
+const circlePadding = 4;
 
 function graphAnimation(tasksCompleted) {
 
@@ -16,14 +22,16 @@ function graphAnimation(tasksCompleted) {
         console.log("Canvas is not supported!!")
     }
 
+    bezierStength = bezierStength / tasksCompleted.length;
+
     gapBetweenDays = canvas.width / tasksCompleted.length;
     ctx.lineWidth = 5;
 
     taskCoords = computeTaskCoords(tasksCompleted, canvas, gapBetweenDays, paddingPX);
 
-    drawBeziers(ctx, canvas, tasksCompleted, paddingPX, gapBetweenDays);
+    drawBeziers(ctx, canvas, taskCoords, tasksCompleted);
 
-    drawDots(ctx, canvas, tasksCompleted);
+    drawDots(ctx, canvas, taskCoords);
 }
 
 function computeTaskCoords(tasksCompleted, canvas, gapBetweenDays, padding) {
@@ -34,23 +42,26 @@ function computeTaskCoords(tasksCompleted, canvas, gapBetweenDays, padding) {
     for (taskI=0; taskI < tasksCompleted.length; taskI++) {
         coord = [
             (taskI+.5) * gapBetweenDays,
-            padding + ( canvas.height - 2*padding ) * tasksCompleted[taskI]/maxTasks
+            padding + ( canvas.height - 2*padding ) * (maxTasks - tasksCompleted[taskI])/maxTasks
         ];
         coords.push(coord);
     }
     return coords
 }
 
-function drawDots(ctx, canvas, tasksCompleted) {
+function drawDots(ctx, canvas, taskCoords) {
 
-    for(taskI=0; taskI < tasksCompleted.length; taskI++) {
-        position = [endPointsX[0], padding + ( canvas.height - 2*padding ) * tasksCompleted[bezierI]/maxTasks]
-        drawCircle(ctx, )
+    for(taskCoord of taskCoords) {
+
+        drawCircle(ctx, taskCoord[0], taskCoord[1], circleWidth + circlePadding, backgroundColour)
+        drawCircle(ctx, taskCoord[0], taskCoord[1], circleWidth, lineColour)
+        drawCircle(ctx, taskCoord[0], taskCoord[1], innerCircleWidth, backgroundColour)
+
     }
 
 }
 
-function drawBeziers(ctx, canvas, tasksCompleted, padding, gapBetweenDays) {
+function drawBeziers(ctx, canvas, taskCoords, tasksCompleted) {
 
     maxTasks = Math.max(...tasksCompleted);
 
@@ -59,33 +70,28 @@ function drawBeziers(ctx, canvas, tasksCompleted, padding, gapBetweenDays) {
 
     for(bezierI=0; bezierI<tasksCompleted.length-1; bezierI++) {
 
-        endPointsX = [(bezierI+.5) * gapBetweenDays, (bezierI+1.5) * gapBetweenDays]
+
         controlPoints = [
-            [endPointsX[0], padding + ( canvas.height - 2*padding ) * tasksCompleted[bezierI]/maxTasks],
-            [endPointsX[0] + bezierStength*gapBetweenDays, padding + ( canvas.height - 2*padding ) * tasksCompleted[bezierI]/maxTasks],
-            [endPointsX[1] - bezierStength*gapBetweenDays, padding + ( canvas.height - 2*padding ) * tasksCompleted[bezierI+1]/maxTasks],
-            [endPointsX[1], padding + ( canvas.height - 2*padding ) * tasksCompleted[bezierI+1]/maxTasks]
+            [taskCoords[bezierI][0], taskCoords[bezierI][1]],
+            [taskCoords[bezierI][0] + bezierStength * canvas.width, taskCoords[bezierI][1]],
+            [taskCoords[bezierI+1][0] - bezierStength * canvas.width, taskCoords[bezierI+1][1]],
+            [taskCoords[bezierI+1][0], taskCoords[bezierI+1][1]]
                         ]
-                        console.log(controlPoints)
         
         drawBezier(controlPoints);
 
     }
+    //connect the end
+    drawLine(ctx, [0, taskCoords[0][1]], taskCoords[0], lineColour)
 }
 
 function drawBezier(controlPoints) {
 
-    for (CP of controlPoints) {
-        //drawCircle(ctx, CP[0], CP[1], 5, 'rgba(255,255,255,1)')
-    }
-
     for(sectionI=0; sectionI<1; sectionI = sectionI + detail) {
 
         point = GetBezierValue(controlPoints, sectionI)
-        console.log(point)
         if (sectionI>0) {
             drawLine( ctx, point, lastPoint, lineColour );
-            console.log('drawing')
         }
         lastPoint = point;
 

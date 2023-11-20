@@ -1,12 +1,14 @@
-function htmlSetup(n) {
+monthAbrebiations = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+function htmlSetup(numTasksSet, numTasksCompleted) {
 
     dayContainer = document.getElementById('days-container');
 
-    for (dayI=0; dayI < n; dayI++) {
+    for (dayI=0; dayI < numTasksCompleted.length; dayI++) {
 
         newDay = document.createElement('div');
         dayLabel = document.createElement("p");
-        dayLabel.innerText = "Hello!";
+        dayLabel.innerText = 'hi \n hello \n' + numTasksCompleted[dayI] + '/' + numTasksSet[dayI];
         progressBar = document.createElement('canvas');
 
         newDay.appendChild(dayLabel)
