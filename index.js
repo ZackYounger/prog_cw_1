@@ -6,16 +6,58 @@ numTasksCompleted = []
 for(i=0;i<n;i++) numTasksSet.push( Math.floor(Math.random() * 10) )
 for(i=0;i<n;i++) numTasksCompleted.push( Math.min(numTasksSet[i], Math.floor(Math.random() * 10) ) )
 
+previousDaysData = [
+    {day:1, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:2, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:3, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false},{text:"Walk the Cat", completed:true}] },
+    {day:4, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:5, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:6, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:7, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:8, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:9, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:10, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+]
+
+nextDaysData = [
+    {day:1, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:2, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:3, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false},{text:"Walk the Cat", completed:true}] },
+    {day:4, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:5, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:6, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:7, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:8, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:9, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:10, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+]
+
 window.onload  = function () {
     console.log('Loaded!')
     //construct the days
 
     //Request list of past n days
-    //[[{day:7, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:False}] }],[]]
+    //[[{day:7, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] }],
+    //[]]
+    
+    numTasksSetList = []
+    numTasksCompletedList = []
+    for (dayData of previousDaysData) {
+        numTasks = 0
+        numTasksCompleted = 0
+        for (task of dayData.tasks) {
+            numTasks += 1
+            if (task.completed) numTasksCompleted += 1
+        }
+        numTasksSetList.push(numTasks)
+        numTasksCompletedList.push(numTasksCompleted)
+    }
 
-    htmlSetup(numTasksSet, numTasksCompleted);
+    //Request list of next n days
 
-    graphAnimation(numTasksCompleted);
+    htmlSetup(previousDaysData, nextDaysData, numTasksSetList, numTasksCompletedList);
+
+    graphAnimation(numTasksCompletedList);
 
 }
 

@@ -3,13 +3,34 @@ body {
     background-color: rgb(0, 0, 0);
 }
 
-.graph-container {
+.main-container {
     padding: 30px;
-    height: 400px;
+    height: 250px;
+    border: purple 1px solid;
+    background-color: blue;
+    padding-bottom: 30px;
+
+    margin-bottom: 20px;
+
+    border: rgb(41, 41, 41)    1px solid;
+    border-radius: 8px;
+}
+
+#graph {
+    --mask: linear-gradient(to left, 
+    rgba(0,0,0, 1) 0,   rgba(0,0,0, 1) 95%, 
+    rgba(0,0,0, 0) 100%, rgba(0,0,0, 0) 0
+    ) 100% 50% / 100% 100% repeat-x;
+
+    font: 2em/1.6em Arial;
+    -webkit-mask: var(--mask); 
+    mask: var(--mask);
+    
 }
 
 .canvas-container {
     height: 80%;
+    background-color: red;
 }
 
 .border {
@@ -22,7 +43,7 @@ body {
 }
 
 
-#days-container {
+.days-container {
     display: flex;
     border: blue 1px solid;
     width: 100%;
@@ -39,6 +60,6 @@ body {
     border: blue 1px solid;
 }
 
-p {
+p, sup {
     color: white;
 }

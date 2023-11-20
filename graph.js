@@ -1,4 +1,4 @@
-const detail = 0.1;
+const detail = 0.05;
 const paddingPX = 30;
 var bezierStength = .7;
 
@@ -12,6 +12,8 @@ const circlePadding = 4;
 function graphAnimation(tasksCompleted) {
 
     canvas = document.getElementById('graph');
+    
+    //console.log(canvas)
     console.log(graph.parentNode)
     canvas.width = graph.parentNode.clientWidth;     // equals window dimension
     canvas.height = graph.parentNode.clientHeight;
