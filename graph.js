@@ -1,5 +1,5 @@
-const detail = 0.05;
-const paddingPX = 30;
+const detail = 0.1;
+const paddingPX = 15;
 var bezierStength = .7;
 
 const lineColour = 'rgba(255,255,255,1)'

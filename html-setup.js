@@ -1,5 +1,8 @@
 monthAbrebiations = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+taskContainerElements = []
+currentVisibleDay = 0;
+
 function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksCompleted) {
 
     dayContainers = document.getElementsByClassName('days-container');
@@ -20,6 +23,7 @@ function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksComplete
     }
 
 
+    selectorContainer = document.getElementById('display-tasks');
     
     for (dayI=0; dayI < nextDaysData.length; dayI++) {
 
@@ -36,24 +40,52 @@ function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksComplete
         addHoverFunction(newDay, dayI)
 
         dayContainers[1].appendChild(newDay)
+
+
+        tasksContainer = document.createElement('div');
+        tasksContainer.classList.add('tasks-container')
+
+        for (taskData of nextDaysData[dayI].tasks) {
+            addTaskToContainer(tasksContainer, taskData.text)
+        }
+        selectorContainer.appendChild(tasksContainer)
+        taskContainerElements.push(tasksContainer)
     }
 
+
+    document.getElementById('submit-button').addEventListener('click', function() {
+        var taskText = document.getElementById('input-box').value;
+        addTaskToContainer(taskContainerElements[currentVisibleDay], taskText)
+    });  
+
+}
+
+
+function addTaskToContainer(container, task) {
+    taskContainer = document.createElement('div');
+    taskContainer.classList.add('task-container', 'border');
+    taskContainer.innerText = task
+
+    container.appendChild(taskContainer);
 }
 
 function addHoverFunction(newDay, dayI) {
-    newDay.onmouseover = function () {
-        //showDayData(nextDaysData[dayI].day);
-        console.log(dayI);
-      };
+    newDay.onclick = function () {
+
+        if (dayI != currentVisibleDay) {
+            taskContainerElements[currentVisibleDay].classList.remove('active');
+            taskContainerElements[currentVisibleDay].offsetHeight;
+            taskContainerElements[dayI].classList.add('active');
+            taskContainerElements[dayI].offsetHeight;
+            currentVisibleDay = dayI
+        }
+    };
 }
+
 
 function getSup(day) {
     if (previousDaysData[dayI].day==1) return 'ˢᵗ'
     else if (previousDaysData[dayI].day==2) return 'ⁿᵈ'
     else if (previousDaysData[dayI].day==3) return 'ʳᵈ'
     else return 'ᵗʰ'
-}
-
-function showDayData(d) {
-    console.log('Boo' + d)
 }

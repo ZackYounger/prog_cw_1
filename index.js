@@ -9,27 +9,27 @@ for(i=0;i<n;i++) numTasksCompleted.push( Math.min(numTasksSet[i], Math.floor(Mat
 previousDaysData = [
     {day:1, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:2, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-    {day:3, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false},{text:"Walk the Cat", completed:true}] },
+    {day:3, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:true},{text:"Walk the Cat", completed:true}] },
     {day:4, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:5, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-    {day:6, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:6, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:true}] },
     {day:7, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:8, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:9, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-    {day:10, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:10,month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
 ]
 
 nextDaysData = [
     {day:1, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-    {day:2, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-    {day:3, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false},{text:"Walk the Cat", completed:true}] },
-    {day:4, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-    {day:5, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-    {day:6, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-    {day:7, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:2, month:7, year:2023, tasks: [{text:"Get Soup", completed:false}] },
+    {day:3, month:7, year:2023, tasks: [{text:"Go for a run", completed:false},{text:"Walk the Cat", completed:true}] },
+    {day:4, month:7, year:2023, tasks: [{text:"Feed my sister", completed:false}] },
+    {day:5, month:7, year:2023, tasks: [{text:"Buy more soup", completed:false}] },
+    {day:6, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}, {text:"Buy more soup", completed:false}, {text:"Buy even more soup", completed:false}] },
+    {day:7, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}, {text:"Message my mother", completed:false}] },
     {day:8, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:9, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-    {day:10, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
+    {day:10,month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
 ]
 
 window.onload  = function () {
