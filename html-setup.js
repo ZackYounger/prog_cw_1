@@ -17,7 +17,7 @@ function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksComplete
 
         newDay.appendChild(dayLabel)
 
-        newDay.classList.add('day-container','test-border')
+        newDay.classList.add('day-container')
 
         dayContainers[0].appendChild(newDay)
     }
@@ -35,9 +35,9 @@ function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksComplete
 
         newDay.appendChild(dayLabel)
 
-        newDay.classList.add('day-container','test-border')
+        newDay.classList.add('day-container')
 
-        addHoverFunction(newDay, dayI)
+        addSelectDayFunctionality(newDay, dayI)
 
         dayContainers[1].appendChild(newDay)
 
@@ -52,31 +52,71 @@ function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksComplete
         taskContainerElements.push(tasksContainer)
     }
 
+    taskContainerElements[0].classList.add('active')
 
     document.getElementById('submit-button').addEventListener('click', function() {
         var taskText = document.getElementById('input-box').value;
-        addTaskToContainer(taskContainerElements[currentVisibleDay], taskText)
+        if (taskText) addTaskToContainer(taskContainerElements[currentVisibleDay], taskText)
     });  
-
 }
 
 
 function addTaskToContainer(container, task) {
     taskContainer = document.createElement('div');
+
+    taskContainer = document.createElement('div');
     taskContainer.classList.add('task-container', 'border');
-    taskContainer.innerText = task
+
+    taskText = document.createElement('p')
+    taskText.innerText = task
+    taskText.classList.add('task-text');
+    taskContainer.appendChild(taskText)
+
+    buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('button-holder')
+
+    completeTaskButton = document.createElement('button');
+    completeTaskButton.classList.add('complete-task-button', 'task-button');
+    buttonContainer.appendChild(completeTaskButton)
+
+    removeTaskButton = document.createElement('button');
+    removeTaskButton.classList.add('remove-task-button', 'task-button');
+    buttonContainer.appendChild(removeTaskButton)
+
+    taskContainer.appendChild(buttonContainer)
 
     container.appendChild(taskContainer);
+
+    addButtonFunctionality(completeTaskButton, removeTaskButton)
 }
 
-function addHoverFunction(newDay, dayI) {
+function addButtonFunctionality(completeTaskButton, removeTaskButton) {
+    completeTaskButton.addEventListener('click', function() {
+        taskTextBox = completeTaskButton.parentNode.parentNode.childNodes[0]
+        console.log(taskTextBox.classList)
+        if (taskTextBox.classList.contains('completed')) {
+            taskTextBox.classList.remove('completed')
+        } else {
+            taskTextBox.classList.add('completed')
+        }
+
+        //update backend
+    })
+
+    removeTaskButton.addEventListener('click', function() {
+        removeTaskButton.parentNode.parentNode.parentNode.removeChild(removeTaskButton.parentNode.parentNode)
+
+        //update backend
+    })
+}
+
+function addSelectDayFunctionality(newDay, dayI) {
     newDay.onclick = function () {
 
         if (dayI != currentVisibleDay) {
             taskContainerElements[currentVisibleDay].classList.remove('active');
             taskContainerElements[currentVisibleDay].offsetHeight;
             taskContainerElements[dayI].classList.add('active');
-            taskContainerElements[dayI].offsetHeight;
             currentVisibleDay = dayI
         }
     };

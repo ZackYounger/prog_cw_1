@@ -1,6 +1,6 @@
 const detail = 0.1;
 const paddingPX = 15;
-var bezierStength = .7;
+var bezierStengthConst = .7;
 
 const lineColour = 'rgba(255,255,255,1)'
 const backgroundColour = 'rgba(0,0,0,1)'
@@ -9,22 +9,33 @@ const circleWidth = 10;
 const innerCircleWidth = 5;
 const circlePadding = 4;
 
-function graphAnimation(tasksCompleted) {
+let canvasWidth;
+let canvasHeight
+let canvas;
+let ctx;
 
+function graphSetup() {
+
+    canvasWidth = graph.parentNode.clientWidth;     // equals window dimension
+    canvasHeight = graph.parentNode.clientHeight;
     canvas = document.getElementById('graph');
-    
-    //console.log(canvas)
-    console.log(graph.parentNode)
-    canvas.width = graph.parentNode.clientWidth;     // equals window dimension
-    canvas.height = graph.parentNode.clientHeight;
-
     if (canvas.getContext) {
         ctx = canvas.getContext('2d');
     } else {
         console.log("Canvas is not supported!!")
     }
+       // equals window dimension
+    canvas.height = canvasHeight;
 
-    bezierStength = bezierStength / tasksCompleted.length;
+
+}
+
+function drawGraph(tasksCompleted) {
+
+    canvas.width = graph.parentNode.clientWidth
+
+
+    bezierStength = bezierStengthConst / tasksCompleted.length;
 
     gapBetweenDays = canvas.width / tasksCompleted.length;
     ctx.lineWidth = 5;
@@ -58,7 +69,6 @@ function drawDots(ctx, canvas, taskCoords) {
         drawCircle(ctx, taskCoord[0], taskCoord[1], circleWidth + circlePadding, backgroundColour)
         drawCircle(ctx, taskCoord[0], taskCoord[1], circleWidth, lineColour)
         drawCircle(ctx, taskCoord[0], taskCoord[1], innerCircleWidth, backgroundColour)
-
     }
 
 }

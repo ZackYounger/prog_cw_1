@@ -57,7 +57,12 @@ window.onload  = function () {
 
     htmlSetup(previousDaysData, nextDaysData, numTasksSetList, numTasksCompletedList);
 
-    graphAnimation(numTasksCompletedList);
+    graphSetup();
+    drawGraph(numTasksCompletedList);
+
+    window.onresize = function () {
+        drawGraph(numTasksCompletedList);
+    }
 
 }
 
