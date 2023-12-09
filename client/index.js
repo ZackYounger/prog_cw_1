@@ -1,12 +1,11 @@
-
 n = 10
 
 numTasksSet = []
 numTasksCompleted = []
 for(i=0;i<n;i++) numTasksSet.push( Math.floor(Math.random() * 10) )
 for(i=0;i<n;i++) numTasksCompleted.push( Math.min(numTasksSet[i], Math.floor(Math.random() * 10) ) )
-
-previousDaysData = [
+/*
+previousDaysTasks = [
     {day:1, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:2, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:3, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:true},{text:"Walk the Cat", completed:true}] },
@@ -17,9 +16,9 @@ previousDaysData = [
     {day:8, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:9, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:10,month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
-]
+]*/
 
-nextDaysData = [
+nextDaysTasks = [
     {day:1, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
     {day:2, month:7, year:2023, tasks: [{text:"Get Soup", completed:false}] },
     {day:3, month:7, year:2023, tasks: [{text:"Go for a run", completed:false},{text:"Walk the Cat", completed:true}] },
@@ -32,9 +31,22 @@ nextDaysData = [
     {day:10,month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] },
 ]
 
-window.onload  = function () {
+window.onload  = async function () {
     console.log('Loaded!')
     //construct the days
+
+    try {
+        let response = await fetch('http://127.0.0.1:8000/getPastDaysData?numDays=10');
+        previousDaysTasks = JSON.parse( await response.text() )
+    } catch(e) {
+        alert(e);
+    }
+    try {
+        let response = await fetch('http://127.0.0.1:8000/getPastDaysData?numDays=10');
+        nextDaysTasks = JSON.parse( await response.text() )
+    } catch(e) {
+        alert(e);
+    }
 
     //Request list of past n days
     //[[{day:7, month:7, year:2023, tasks: [{text:"Walk the Dog", completed:false}] }],
@@ -42,7 +54,7 @@ window.onload  = function () {
     
     numTasksSetList = []
     numTasksCompletedList = []
-    for (dayData of previousDaysData) {
+    for (dayData of previousDaysTasks) {
         numTasks = 0
         numTasksCompleted = 0
         for (task of dayData.tasks) {
@@ -55,7 +67,7 @@ window.onload  = function () {
 
     //Request list of next n days
 
-    htmlSetup(previousDaysData, nextDaysData, numTasksSetList, numTasksCompletedList);
+    htmlSetup(previousDaysTasks, nextDaysTasks, numTasksSetList, numTasksCompletedList);
 
     graphSetup();
     drawGraph(numTasksCompletedList);

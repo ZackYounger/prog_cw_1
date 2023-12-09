@@ -3,17 +3,18 @@ monthAbrebiations = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Se
 taskContainerElements = []
 currentVisibleDay = 0;
 
-function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksCompleted) {
+function htmlSetup(previousDaysTasks, nextDaysTasks, numTasksSet, numTasksCompleted) {
 
     dayContainers = document.getElementsByClassName('days-container');
 
-    for (dayI=0; dayI < previousDaysData.length; dayI++) {
+    for (dayI=0; dayI < previousDaysTasks.length; dayI++) {
 
-        sup = getSup(previousDaysData[dayI].day)
+        day = previousDaysTasks[dayI].stringDate.split('/')[0]
+        sup = getSup(day)
 
         newDay = document.createElement('div');
         dayLabel = document.createElement("p");
-        dayLabel.innerText = previousDaysData[dayI].day+sup +'\n'+ numTasksCompleted[dayI] + '/' + numTasksSet[dayI];
+        dayLabel.innerText = day+sup +'\n'+ numTasksCompleted[dayI] + '/' + numTasksSet[dayI];
 
         newDay.appendChild(dayLabel)
 
@@ -25,13 +26,14 @@ function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksComplete
 
     selectorContainer = document.getElementById('display-tasks');
     
-    for (dayI=0; dayI < nextDaysData.length; dayI++) {
+    for (dayI=0; dayI < nextDaysTasks.length; dayI++) {
 
-        sup = getSup(nextDaysData[dayI].day)
+        day = previousDaysTasks[dayI].stringDate.split('/')[0]
+        sup = getSup(day)
 
         newDay = document.createElement('div');
         dayLabel = document.createElement("p");
-        dayLabel.innerText = previousDaysData[dayI].day+sup +'\n'+ numTasksCompleted[dayI] + '/' + numTasksSet[dayI];
+        dayLabel.innerText = day+sup +'\n'+ numTasksCompleted[dayI] + '/' + numTasksSet[dayI];
 
         newDay.appendChild(dayLabel)
 
@@ -45,7 +47,7 @@ function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksComplete
         tasksContainer = document.createElement('div');
         tasksContainer.classList.add('tasks-container')
 
-        for (taskData of nextDaysData[dayI].tasks) {
+        for (taskData of nextDaysTasks[dayI].tasks) {
             addTaskToContainer(tasksContainer, taskData.text)
         }
         selectorContainer.appendChild(tasksContainer)
@@ -55,14 +57,15 @@ function htmlSetup(previousDaysData, nextDaysData, numTasksSet, numTasksComplete
     taskContainerElements[0].classList.add('active')
 
     document.getElementById('submit-button').addEventListener('click', function() {
-        var taskText = document.getElementById('input-box').value;
-        if (taskText) addTaskToContainer(taskContainerElements[currentVisibleDay], taskText)
+        var inputBox = document.getElementById('input-box');
+        if (inputBox.value) addTaskToContainer(taskContainerElements[currentVisibleDay], inputBox.value)
+        inputBox.value = '';
     });  
 }
 
 
 function addTaskToContainer(container, task) {
-    taskContainer = document.createElement('div');
+    taskContainer = document.createElement('div')
 
     taskContainer = document.createElement('div');
     taskContainer.classList.add('task-container', 'border');
@@ -87,13 +90,13 @@ function addTaskToContainer(container, task) {
 
     container.appendChild(taskContainer);
 
-    addButtonFunctionality(completeTaskButton, removeTaskButton)
+    addTaskButtonsFunctionality(completeTaskButton, removeTaskButton)
 }
 
-function addButtonFunctionality(completeTaskButton, removeTaskButton) {
+function addTaskButtonsFunctionality(completeTaskButton, removeTaskButton) {
+
     completeTaskButton.addEventListener('click', function() {
         taskTextBox = completeTaskButton.parentNode.parentNode.childNodes[0]
-        console.log(taskTextBox.classList)
         if (taskTextBox.classList.contains('completed')) {
             taskTextBox.classList.remove('completed')
         } else {
@@ -124,8 +127,8 @@ function addSelectDayFunctionality(newDay, dayI) {
 
 
 function getSup(day) {
-    if (previousDaysData[dayI].day==1) return 'ˢᵗ'
-    else if (previousDaysData[dayI].day==2) return 'ⁿᵈ'
-    else if (previousDaysData[dayI].day==3) return 'ʳᵈ'
+    if (previousDaysTasks[dayI].day==1) return 'ˢᵗ'
+    else if (previousDaysTasks[dayI].day==2) return 'ⁿᵈ'
+    else if (previousDaysTasks[dayI].day==3) return 'ʳᵈ'
     else return 'ᵗʰ'
 }
