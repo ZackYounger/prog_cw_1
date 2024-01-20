@@ -1,20 +1,37 @@
 monthAbrebiations = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 taskContainerElements = []
-currentVisibleDay = 0;
+currentVisibleDayI = 0;
+let currentVisibleDay;
 
-function htmlSetup(previousDaysTasks, nextDaysTasks, numTasksSet, numTasksCompleted) {
+function htmlSetup(previousDaysTasks, futureDaysTasks, prevNumTasksSetList, prevNumTasksCompletedList) {
+
+    console.log(previousDaysTasks)
+    console.log()
+
+    futureNumTasksSetList = []
+    futureNumTasksCompletedList = []
+    for (dayData of futureDaysTasks) {
+        numTasks = 0
+        numTasksCompleted = 0
+        for (task of dayData.tasks) {
+            numTasks += 1
+            if (task.completed) numTasksCompleted += 1
+        }
+        futureNumTasksSetList.push(numTasks)
+        futureNumTasksCompletedList.push(numTasksCompleted)
+    }
 
     dayContainers = document.getElementsByClassName('days-container');
 
     for (dayI=0; dayI < previousDaysTasks.length; dayI++) {
 
-        day = previousDaysTasks[dayI].stringDate.split('/')[0]
+        day = previousDaysTasks[dayI].stringDate.split('|')[0]
         sup = getSup(day)
 
         newDay = document.createElement('div');
         dayLabel = document.createElement("p");
-        dayLabel.innerText = day+sup +'\n'+ numTasksCompleted[dayI] + '/' + numTasksSet[dayI];
+        dayLabel.innerText = day+sup +'\n'+ prevNumTasksCompletedList[dayI] + '/' + prevNumTasksSetList[dayI];
 
         newDay.appendChild(dayLabel)
 
@@ -28,12 +45,12 @@ function htmlSetup(previousDaysTasks, nextDaysTasks, numTasksSet, numTasksComple
     
     for (dayI=0; dayI < nextDaysTasks.length; dayI++) {
 
-        day = previousDaysTasks[dayI].stringDate.split('/')[0]
+        day = futureDaysTasks[dayI].stringDate.split('|')[0]
         sup = getSup(day)
 
         newDay = document.createElement('div');
         dayLabel = document.createElement("p");
-        dayLabel.innerText = day+sup +'\n'+ numTasksCompleted[dayI] + '/' + numTasksSet[dayI];
+        dayLabel.innerText = day+sup +'\n'+ futureNumTasksCompletedList[dayI] + '/' + futureNumTasksSetList[dayI];
 
         newDay.appendChild(dayLabel)
 
@@ -52,14 +69,37 @@ function htmlSetup(previousDaysTasks, nextDaysTasks, numTasksSet, numTasksComple
         }
         selectorContainer.appendChild(tasksContainer)
         taskContainerElements.push(tasksContainer)
+
+        if (dayI == 0) {
+            currentVisibleDay = newDay
+        } else {
+            newDay.classList.add('not-active')
+        }
     }
 
     taskContainerElements[0].classList.add('active')
 
-    document.getElementById('submit-button').addEventListener('click', function() {
+    //Submit New Task Button
+    document.getElementById('submit-button').addEventListener('click', async function() {
         var inputBox = document.getElementById('input-box');
-        if (inputBox.value) addTaskToContainer(taskContainerElements[currentVisibleDay], inputBox.value)
+        if (inputBox.value) addTaskToContainer(taskContainerElements[currentVisibleDayI], inputBox.value)
+        console.log(futureDaysTasks[currentVisibleDayI].stringDate)
+        try {
+            await fetch('http://127.0.0.1:8000/addTask', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                  // Add any other headers if needed
+                },
+                body: JSON.stringify( {
+                    stringDate : futureDaysTasks[currentVisibleDayI].stringDate,
+                    taskText : inputBox.value} )
+              })        } catch(e) {
+            alert(e);
+        }
+
         inputBox.value = '';
+
     });  
 }
 
@@ -115,12 +155,16 @@ function addTaskButtonsFunctionality(completeTaskButton, removeTaskButton) {
 
 function addSelectDayFunctionality(newDay, dayI) {
     newDay.onclick = function () {
-
-        if (dayI != currentVisibleDay) {
-            taskContainerElements[currentVisibleDay].classList.remove('active');
-            taskContainerElements[currentVisibleDay].offsetHeight;
+        if (currentVisibleDay) {
+            currentVisibleDay.classList.add('not-active')
+        }
+        newDay.classList.remove('not-active')
+        if (dayI != currentVisibleDayI) {
+            taskContainerElements[currentVisibleDayI].classList.remove('active');
+            taskContainerElements[currentVisibleDayI].offsetHeight;
             taskContainerElements[dayI].classList.add('active');
-            currentVisibleDay = dayI
+            currentVisibleDayI = dayI
+            currentVisibleDay = newDay
         }
     };
 }

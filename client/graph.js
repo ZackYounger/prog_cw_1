@@ -15,7 +15,6 @@ let canvas;
 let ctx;
 
 function graphSetup() {
-
     canvasWidth = graph.parentNode.clientWidth;     // equals window dimension
     canvasHeight = graph.parentNode.clientHeight;
     canvas = document.getElementById('graph');
@@ -30,32 +29,31 @@ function graphSetup() {
 
 }
 
-function drawGraph(tasksCompleted) {
-
+function drawGraph(numTasksCompletedList) {
     canvas.width = graph.parentNode.clientWidth
 
 
-    bezierStength = bezierStengthConst / tasksCompleted.length;
+    bezierStength = bezierStengthConst / numTasksCompletedList.length;
 
-    gapBetweenDays = canvas.width / tasksCompleted.length;
+    gapBetweenDays = canvas.width / numTasksCompletedList.length;
     ctx.lineWidth = 5;
 
-    taskCoords = computeTaskCoords(tasksCompleted, canvas, gapBetweenDays, paddingPX);
+    taskCoords = computeTaskCoords(numTasksCompletedList, canvas, gapBetweenDays, paddingPX);
 
-    drawBeziers(ctx, canvas, taskCoords, tasksCompleted);
+    drawBeziers(ctx, canvas, taskCoords, numTasksCompletedList);
 
     drawDots(ctx, canvas, taskCoords);
 }
 
-function computeTaskCoords(tasksCompleted, canvas, gapBetweenDays, padding) {
+function computeTaskCoords(numTasksCompletedList, canvas, gapBetweenDays, padding) {
     
-    maxTasks = Math.max(...tasksCompleted);
+    maxTasks = Math.max( Math.max(...numTasksCompletedList), 1 );
 
     coords = []
-    for (taskI=0; taskI < tasksCompleted.length; taskI++) {
+    for (taskI=0; taskI < numTasksCompletedList.length; taskI++) {
         coord = [
             (taskI+.5) * gapBetweenDays,
-            padding + ( canvas.height - 2*padding ) * (maxTasks - tasksCompleted[taskI])/maxTasks
+            padding + ( canvas.height - 2*padding ) * (maxTasks - numTasksCompletedList[taskI])/maxTasks
         ];
         coords.push(coord);
     }
@@ -73,14 +71,14 @@ function drawDots(ctx, canvas, taskCoords) {
 
 }
 
-function drawBeziers(ctx, canvas, taskCoords, tasksCompleted) {
+function drawBeziers(ctx, canvas, taskCoords, numTasksCompletedList) {
 
-    maxTasks = Math.max(...tasksCompleted);
+    maxTasks = Math.max(...numTasksCompletedList);
 
     //ctx.fillStyle = "rgba(0, 100, 150, 1)";
     //ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    for(bezierI=0; bezierI<tasksCompleted.length-1; bezierI++) {
+    for(bezierI=0; bezierI<numTasksCompletedList.length-1; bezierI++) {
 
 
         controlPoints = [
