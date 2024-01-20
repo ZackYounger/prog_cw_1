@@ -1,6 +1,12 @@
 monthAbrebiations = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 taskContainerElements = []
+
+futureDayLabels = []
+
+let futureNumTasksSetList;
+let futureNumTasksCompletedList;
+
 currentVisibleDayI = 0;
 let currentVisibleDay;
 
@@ -49,8 +55,22 @@ function htmlSetup(previousDaysTasks, futureDaysTasks, prevNumTasksSetList, prev
         sup = getSup(day)
 
         newDay = document.createElement('div');
-        dayLabel = document.createElement("p");
-        dayLabel.innerText = day+sup +'\n'+ futureNumTasksCompletedList[dayI] + '/' + futureNumTasksSetList[dayI];
+        //dayLabel = document.createElement("p");
+        dayLabel = document.createElement("div");
+
+        dayLabel.style.margin = '0px'
+        dayLabel.style.padding = '0px'
+
+        x = document.createElement("p");
+        x.innerText = day+sup
+        x.classList.add('day-container-element')
+        y = document.createElement("p");
+        y.innerText = futureNumTasksCompletedList[dayI] + '/' + futureNumTasksSetList[dayI];
+        y.classList.add('day-container-element')
+
+
+        dayLabel.appendChild(x)
+        dayLabel.appendChild(y)
 
         newDay.appendChild(dayLabel)
 
@@ -75,6 +95,8 @@ function htmlSetup(previousDaysTasks, futureDaysTasks, prevNumTasksSetList, prev
         } else {
             newDay.classList.add('not-active')
         }
+
+        futureDayLabels.push( newDay )
     }
 
     taskContainerElements[0].classList.add('active')
@@ -82,24 +104,27 @@ function htmlSetup(previousDaysTasks, futureDaysTasks, prevNumTasksSetList, prev
     //Submit New Task Button
     document.getElementById('submit-button').addEventListener('click', async function() {
         var inputBox = document.getElementById('input-box');
-        if (inputBox.value) addTaskToContainer(taskContainerElements[currentVisibleDayI], inputBox.value)
-        console.log(futureDaysTasks[currentVisibleDayI].stringDate)
-        try {
-            await fetch('http://127.0.0.1:8000/addTask', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                  // Add any other headers if needed
-                },
-                body: JSON.stringify( {
-                    stringDate : futureDaysTasks[currentVisibleDayI].stringDate,
-                    taskText : inputBox.value} )
-              })        } catch(e) {
-            alert(e);
+        if (inputBox.value) {
+            addTaskToContainer(taskContainerElements[currentVisibleDayI], inputBox.value)
+            try {
+                await fetch('http://127.0.0.1:8000/addTask', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify( {
+                        stringDate : futureDaysTasks[currentVisibleDayI].stringDate,
+                        taskText : inputBox.value} )
+                })        } catch(e) {
+                alert(e);
+            }
+
+            inputBox.value = '';
+
+            totalTaskNumContainer = currentVisibleDay.childNodes[0].childNodes[1]
+            futureNumTasksSetList[currentVisibleDayI] += 1
+            totalTaskNumContainer.innerText = futureNumTasksCompletedList[currentVisibleDayI] + '/' + futureNumTasksSetList[currentVisibleDayI]
         }
-
-        inputBox.value = '';
-
     });  
 }
 
@@ -134,20 +159,36 @@ function addTaskToContainer(container, task) {
 }
 
 function addTaskButtonsFunctionality(completeTaskButton, removeTaskButton) {
-
     completeTaskButton.addEventListener('click', function() {
+        
         taskTextBox = completeTaskButton.parentNode.parentNode.childNodes[0]
+        completedTaskNumContainer = currentVisibleDay.childNodes[0].childNodes[1]
+    
         if (taskTextBox.classList.contains('completed')) {
             taskTextBox.classList.remove('completed')
+            futureNumTasksCompletedList[currentVisibleDayI] -= 1
         } else {
             taskTextBox.classList.add('completed')
+            futureNumTasksCompletedList[currentVisibleDayI] += 1
         }
+
+        completedTaskNumContainer.innerText = futureNumTasksCompletedList[currentVisibleDayI] + '/' + futureNumTasksSetList[currentVisibleDayI]
 
         //update backend
     })
 
     removeTaskButton.addEventListener('click', function() {
+
+        taskTextBox = removeTaskButton.parentNode.parentNode.childNodes[0].classList
+        if (taskTextBox.contains('completed')) {
+            futureNumTasksCompletedList[currentVisibleDayI] -= 1
+        }
+
         removeTaskButton.parentNode.parentNode.parentNode.removeChild(removeTaskButton.parentNode.parentNode)
+
+        totalTaskNumContainer = currentVisibleDay.childNodes[0].childNodes[1]
+        futureNumTasksSetList[currentVisibleDayI] -= 1
+        totalTaskNumContainer.innerText = futureNumTasksCompletedList[currentVisibleDayI] + '/' + futureNumTasksSetList[currentVisibleDayI]
 
         //update backend
     })
