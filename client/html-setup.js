@@ -3,9 +3,10 @@ monthAbrebiations = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Se
 taskContainerElements = []
 
 futureDayLabels = []
-
 let futureNumTasksSetList;
 let futureNumTasksCompletedList;
+
+let futureTasksLists;
 
 currentVisibleDayI = 0;
 let currentVisibleDay;
@@ -17,13 +18,17 @@ function htmlSetup(previousDaysTasks, futureDaysTasks, prevNumTasksSetList, prev
 
     futureNumTasksSetList = []
     futureNumTasksCompletedList = []
+    futureTasksLists = []
     for (dayData of futureDaysTasks) {
         numTasks = 0
         numTasksCompleted = 0
+        dayTasksList = []
         for (task of dayData.tasks) {
+            dayTasksList.push( task.text )
             numTasks += 1
             if (task.completed) numTasksCompleted += 1
         }
+        futureTasksLists.push( dayTasksList )
         futureNumTasksSetList.push(numTasks)
         futureNumTasksCompletedList.push(numTasksCompleted)
     }
@@ -104,8 +109,11 @@ function htmlSetup(previousDaysTasks, futureDaysTasks, prevNumTasksSetList, prev
     //Submit New Task Button
     document.getElementById('submit-button').addEventListener('click', async function() {
         var inputBox = document.getElementById('input-box');
-        if (inputBox.value) {
-            addTaskToContainer(taskContainerElements[currentVisibleDayI], inputBox.value)
+        if (futureTasksLists[currentVisibleDayI].includes(inputBox.value)) {
+            alert( inputBox.value + ' has already been added as a task' )
+        } else if (inputBox.value) {
+            futureTasksLists[currentVisibleDayI].push(inputBox.value)
+            addTaskToContainer(taskContainerElements[currentVisibleDayI], inputBox.value, futureDaysTasks)
             try {
                 await fetch('http://127.0.0.1:8000/addTask', {
                     method: 'POST',
@@ -119,17 +127,16 @@ function htmlSetup(previousDaysTasks, futureDaysTasks, prevNumTasksSetList, prev
                 alert(e);
             }
 
-            inputBox.value = '';
-
             totalTaskNumContainer = currentVisibleDay.childNodes[0].childNodes[1]
             futureNumTasksSetList[currentVisibleDayI] += 1
             totalTaskNumContainer.innerText = futureNumTasksCompletedList[currentVisibleDayI] + '/' + futureNumTasksSetList[currentVisibleDayI]
         }
+        inputBox.value = '';
     });  
 }
 
 
-function addTaskToContainer(container, task) {
+function addTaskToContainer(container, task, futureDaysTasks) {
     taskContainer = document.createElement('div')
 
     taskContainer = document.createElement('div');
@@ -155,15 +162,31 @@ function addTaskToContainer(container, task) {
 
     container.appendChild(taskContainer);
 
-    addTaskButtonsFunctionality(completeTaskButton, removeTaskButton)
+    addTaskButtonsFunctionality(completeTaskButton, removeTaskButton, futureDaysTasks)
 }
 
-function addTaskButtonsFunctionality(completeTaskButton, removeTaskButton) {
-    completeTaskButton.addEventListener('click', function() {
+function addTaskButtonsFunctionality(completeTaskButton, removeTaskButton, futureDaysTasks) {
+    completeTaskButton.addEventListener('click', async function() {
         
         taskTextBox = completeTaskButton.parentNode.parentNode.childNodes[0]
         completedTaskNumContainer = currentVisibleDay.childNodes[0].childNodes[1]
     
+
+        //update backend
+        try {
+            await fetch('http://127.0.0.1:8000/toggleCompletion', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify( {
+                    stringDate : futureDaysTasks[currentVisibleDayI].stringDate,
+                    taskText : taskTextBox.innerText} )
+            })        } catch(e) {
+            alert(e);
+        }
+
+
         if (taskTextBox.classList.contains('completed')) {
             taskTextBox.classList.remove('completed')
             futureNumTasksCompletedList[currentVisibleDayI] -= 1
@@ -173,15 +196,27 @@ function addTaskButtonsFunctionality(completeTaskButton, removeTaskButton) {
         }
 
         completedTaskNumContainer.innerText = futureNumTasksCompletedList[currentVisibleDayI] + '/' + futureNumTasksSetList[currentVisibleDayI]
-
-        //update backend
     })
 
-    removeTaskButton.addEventListener('click', function() {
+    removeTaskButton.addEventListener('click', async function() {
 
-        taskTextBox = removeTaskButton.parentNode.parentNode.childNodes[0].classList
-        if (taskTextBox.contains('completed')) {
+        taskTextBox = removeTaskButton.parentNode.parentNode.childNodes[0]
+        if (taskTextBox.classList.contains('completed')) {
             futureNumTasksCompletedList[currentVisibleDayI] -= 1
+        }
+        console.log(futureDaysTasks, currentVisibleDayI)
+        //update backend
+        try {
+            await fetch('http://127.0.0.1:8000/removeTask', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify( {
+                    stringDate : futureDaysTasks[currentVisibleDayI].stringDate,
+                    taskText : taskTextBox.innerText} )
+            })        } catch(e) {
+            alert(e);
         }
 
         removeTaskButton.parentNode.parentNode.parentNode.removeChild(removeTaskButton.parentNode.parentNode)
@@ -190,7 +225,6 @@ function addTaskButtonsFunctionality(completeTaskButton, removeTaskButton) {
         futureNumTasksSetList[currentVisibleDayI] -= 1
         totalTaskNumContainer.innerText = futureNumTasksCompletedList[currentVisibleDayI] + '/' + futureNumTasksSetList[currentVisibleDayI]
 
-        //update backend
     })
 }
 
