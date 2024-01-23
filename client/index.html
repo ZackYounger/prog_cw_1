@@ -1,43 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Task Manager</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>    
 
-    <div class="main-container graph-container border">
-      <div class="canvas-container">
-        <canvas id="graph"></canvas>
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-      <div class="days-container top-day-container">
+<body>
 
-      </div>
-      
+  <div class="main-container graph-container border">
+    <div class="canvas-container">
+      <canvas id="graph"></canvas>
     </div>
 
+    <div class="days-container top-day-container">
 
-    <div class="main-container selector-container border">
-      <div class="days-container bottom-day-container"></div>
-      <div id="interaction-window">
-        <div id="display-tasks" class="side-by-side border"></div>
-          <div id="task-input" class="side-by-side">
-            <div class="button-holder vertical-center">
-            <input placeholder="Task..." id="input-box">
-            <button id="submit-button"></button>
-            </div>
+    </div>
+
+  </div>
+
+
+  <div class="main-container selector-container border">
+    <div class="days-container bottom-day-container"></div>
+    <div id="interaction-window">
+      <div id="display-tasks" class="side-by-side border"></div>
+      <div id="task-input" class="side-by-side">
+        <div class="button-holder vertical-center">
+          <input placeholder="Task..." id="input-box">
+          <button id="submit-button"></button>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="html-setup.js"></script>
-    <script src="graph.js"></script>
-    <script src="index.js"></script>
+  <script src="html-setup.js" type="module"></script>
+  <script src="graph.js" type="module"></script>
+  <script src="index.js" type="module"></script>
 
 
-  </body>
+</body>
+
 </html>
