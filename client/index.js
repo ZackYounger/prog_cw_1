@@ -1,5 +1,5 @@
 import { htmlSetup, htmlUpdate, removeAddedElements } from './html-setup.js';
-import { graphSetup, drawGraph } from './graph.js';
+import { graphSetup, drawGraph, clearCanvas } from './graph.js';
 
 const dayWidth = 100;
 
@@ -66,6 +66,7 @@ async function updatePage () {
 let funcCall;
 
 window.onresize = function () {
+  clearCanvas();
   clearTimeout(funcCall);
   funcCall = setTimeout(updatePage, 100);
 };

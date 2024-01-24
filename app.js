@@ -12,9 +12,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-// const calendarData = fetch('./data.json')
-//  .then((response) => response.json());
-
 const calendarData = require('./data.json');
 
 function getDatesString (date) {

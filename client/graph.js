@@ -77,7 +77,6 @@ function drawBeziers (ctx, canvas, taskCoords, numTasksCompletedList, bezierSten
 
     drawBezier(controlPoints);
   }
-  // connect the end
   drawLine(ctx, [0, taskCoords[0][1]], taskCoords[0], lineColour);
 }
 
@@ -137,4 +136,8 @@ function drawCircle (ctx, x, y, radius, fill, stroke, strokeWidth) {
     ctx.strokeStyle = stroke;
     ctx.stroke();
   }
+}
+
+export function clearCanvas () {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
