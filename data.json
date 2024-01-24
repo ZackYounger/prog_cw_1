@@ -1,0 +1,65 @@
+{
+  "24|1|2024": [
+    {
+      "text": "Walk the Dog",
+      "completed": false
+    }
+  ],
+  "25|1|2024": [
+    {
+      "text": "Go to the gym",
+      "completed": false
+    },
+    {
+      "text": "Deliver Dave's parcel",
+      "completed": false
+    }
+  ],
+  "26|1|2024": [
+    {
+      "text": "Take a colder shower",
+      "completed": false
+    }
+  ],
+  "27|1|2024": [
+    {
+      "text": "Walk the Dog",
+      "completed": false
+    },
+    {
+      "text": "Finish my coursework",
+      "completed": true
+    }
+  ],
+  "28|1|2024": [],
+  "29|1|2024": [
+    {
+      "text": "Read a chapter of my book",
+      "completed": false
+    },
+    {
+      "text": "Get more cat food",
+      "completed": true
+    }
+  ],
+  "30|1|2024": [
+    {
+      "text": "Go to the gym",
+      "completed": false
+    },
+    {
+      "text": "Take sophie to her play",
+      "completed": false
+    },
+    {
+      "text": "Take a cold shower",
+      "completed": false
+    }
+  ],
+  "31|1|2024": [
+    {
+      "text": "Clean the spare bedroom",
+      "completed": false
+    }
+  ]
+}

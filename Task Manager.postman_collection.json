@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "e9c04ba8-7872-4f7d-b2b7-81155da9a161",
+		"name": "Task Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32548513"
+	},
+	"item": [
+		{
+			"name": "getPastDaysData",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/getPastDaysData?numDays=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"getPastDaysData"
+					],
+					"query": [
+						{
+							"key": "numDays",
+							"value": "5"
+						}
+					]
+				},
+				"description": "This endpoint makes an HTTP GET request to retrieve data for the past number of days specified in the \"numDays\" query parameter.\n\n### Response\n\nThe response will have a status code of 200, and it will return an array of objects, each containing a \"stringDate\" and \"tasks\" property. The \"stringDate\" property represents the date, and the \"tasks\" property contains an array of tasks for that date.\n\nExample:\n\n``` json\n[\n    {\n        \"stringDate\": \"24|1|2024\",\n        \"tasks\": [{\"text\": \"Get up before 8am\", \"completed\": \"true\"}]\n    },\n    {\n        \"stringDate\": \"25|1|2024\",\n        \"tasks\": [{\"text\": \"Take a cold shower\", \"completed\": \"true\"}, {\"text\": \"Wash all the sheets\", \"completed\": \"true\"}]\n    },\n    {\n        \"stringDate\": \"26|1|2024\",\n        \"tasks\": [{\"text\": \"Deliver John's package\", \"completed\": \"true\"}, {\"text\": \"Go to the gym\", \"completed\": \"false\"}]\n    },\n    {\n        \"stringDate\": \"27|1|2024\",\n        \"tasks\": [{\"text\": \"Write the christmas cards\", \"completed\": \"true\"}]\n    },\n    {\n        \"stringDate\": \"28|1|2024\",\n        \"tasks\": [{\"text\": \"No sugar today\", \"completed\": \"false\"}]\n    }\n]\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "getFutureDaysData",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/getFutureDaysData?numDays=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"getFutureDaysData"
+					],
+					"query": [
+						{
+							"key": "numDays",
+							"value": "5"
+						}
+					]
+				},
+				"description": "This endpoint makes an HTTP GET request to retrieve data for the next number of days specified in the \"numDays\" query parameter.\n\n### Response\n\nThe response will have a status code of 200, and it will return an array of objects, each containing a \"stringDate\" and \"tasks\" property. The \"stringDate\" property represents the date, and the \"tasks\" property contains an array of tasks for that date.\n\nExample:\n\n``` json\n[\n    {\n        \"stringDate\": \"24|1|2024\",\n        \"tasks\": [{\"text\": \"Go for a run\", \"completed\": \"false\"}]\n    },\n    {\n        \"stringDate\": \"25|1|2024\",\n        \"tasks\": []\n    },\n    {\n        \"stringDate\": \"26|1|2024\",\n        \"tasks\": [{\"text\": \"Do my programming Coursework\", \"completed\": \"true\"}, {\"text\": \"Go to the gym\", \"completed\": \"false\"}]\n    },\n    {\n        \"stringDate\": \"27|1|2024\",\n        \"tasks\": []\n    },\n    {\n        \"stringDate\": \"28|1|2024\",\n        \"tasks\": []\n    }\n]\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "addTask",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"taskText\": \"Walk the Dog\", \"stringDate\": \"1|2|2022\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/addTask",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"addTask"
+					]
+				},
+				"description": "This endpoint allows you to add a new task by sending an HTTP POST request to the specified URL. The request should include a JSON payload in the raw request body with the keys \"taskText\" and \"stringDate\". The \"taskText\" key is used to provide the text of the task, and the \"stringDate\" key is used to specify the date for the task.\n\nUpon successful execution, the endpoint will return a 200 status code along with a JSON response containing the \"taskText\" and \"stringDate\" of the added task.\n\n### Example request payload:\n\n``` json\n{\n    \"taskText\": \"Walk the dog\",\n    \"stringDate\": \"31-12-2023\"\n}\n\n ```\n\n### Response\n\nUpon a successful execution, the endpoint returns a status code of 200 along with the added task's text and date in the response body.\n\nExample:\n\n``` json\n{\n    \"taskText\": \"Walk the dog\",\n    \"stringDate\": \"12-31-2023\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "removeTask",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"taskText\": \"Walk the Dog\", \"stringDate\": \"1|2|2022\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/removeTask",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"removeTask"
+					]
+				},
+				"description": "This endpoint is used to remove a task by sending an HTTP POST request to the specified URL. The request should include a payload with the raw request body type containing the task text and the date of the task to be removed.\n\n### Example request payload:\n\n``` json\n{\n    \"taskText\": \"Fix the sink\",\n    \"stringDate\": \"14|11|2023\"\n}\n\n ```\n\n### Response\n\nUpon a successful execution, the endpoint returns a status code of 200 along with the removed task's text and date in the response body.\n\nExample:\n\n``` json\n{\n    \"taskText\": \"Fix the sink\",\n    \"stringDate\": \"14|11|2023\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "toggleCompletion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"taskText\": \"Walk the Dog\", \"stringDate\": \"1|2|2022\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/toggleCompletion",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"toggleCompletion"
+					]
+				},
+				"description": "This endpoint allows you to toggle the completion state of a task by sending an HTTP POST request to the specified URL.\n\nThe request should include the taskText and stringDate parameters in the request body. Upon successful execution, the endpoint returns a 200 status with the updated taskText and stringDate in the response body.\n\n### Example request payload:\n\n``` json\n{\n    \"taskText\": \"Feed the cat\",\n    \"stringDate\": \"04|01|2023\"\n}\n\n ```\n\n### Response\n\nUpon a successful execution, the endpoint returns a status code of 200 along with the changed task's text and date in the response body.\n\nExample:\n\n``` json\n{\n    \"taskText\": \"Feed the cat\",\n    \"stringDate\": \"04|01|2023\"\n}\n\n ```"
+			},
+			"response": []
+		}
+	]
+}
