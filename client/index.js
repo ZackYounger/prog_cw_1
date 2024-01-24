@@ -4,7 +4,6 @@ import { graphSetup, drawGraph } from './graph.js';
 const dayWidth = 100;
 
 let n;
-let lastn;
 
 let previousDaysTasks;
 let nextDaysTasks;
@@ -21,15 +20,7 @@ async function updatePage () {
   // remove all content added by htmlupdate()
   removeAddedElements();
 
-  // window.innerWidth is extremely unreliable and sometimes produces horrifically huge results
-  // I have a small check in place to ensure that two results agree with each other
-  if (typeof n === 'undefined') {
-    n = Math.round(window.innerWidth / dayWidth);
-  }
-  lastn = n;
-  n = Math.round(window.innerWidth / dayWidth);
-
-  if (lastn !== n) return;
+  n = Math.round(document.body.offsetWidth / dayWidth);
 
   // Fetch calander data for both the past and future days
   try {
@@ -72,7 +63,12 @@ async function updatePage () {
   drawGraph(prevNumTasksCompletedList);
 }
 
-window.addEventListener('resize', updatePage);
+let funcCall;
+
+window.onresize = function () {
+  clearTimeout(funcCall);
+  funcCall = setTimeout(updatePage, 100);
+};
 
 // hash function for populating the past days
 // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
