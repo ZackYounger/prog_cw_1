@@ -16,7 +16,7 @@ app.use(function (req, res, next) {
 //  .then((response) => response.json());
 
 const calendarData = require('./data.json');
-console.log(calendarData);
+
 function getDatesString (date) {
   return date.getDate() + '|' + (date.getMonth() + 1) + '|' + date.getFullYear();
 }
@@ -65,7 +65,7 @@ app.post('/addTask', function (req, resp) {
 
   const stringDate = receivedData.stringDate;
   const taskText = receivedData.taskText;
-  console.log(stringDate, taskText);
+
   if (stringDate in calendarData) {
     calendarData[stringDate].push({ text: taskText, completed: false });
   } else {
